@@ -1,7 +1,7 @@
 package com.rest.restservice;
  
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.util.logging.Logger;
 
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -15,30 +15,28 @@ import javax.ws.rs.core.MediaType;
 import org.omilab.robot.body.Body;
 import org.omilab.robot.interfaces.bodyworld.EnumMotorDirection;
 import org.omilab.robot.interfaces.bodyworld.EnumWorldAccessMethod;
- 
+
 @Path("/robot")
 @Singleton
 public class Robot {
-	private Body body;
+    private static final Logger log= Logger.getLogger( Robot.class.getName() );
+
+    private Body body;
 	
 	@GET
     @Path("init")
     @Produces(MediaType.TEXT_PLAIN)
     public String init(@QueryParam("AccessMethod") String accessMethod) {
-    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(baos);
-        PrintStream old = System.out;
-        
-        System.setOut(ps);
-        
-        body = new Body(EnumWorldAccessMethod.valueOf(accessMethod));
-		
-		System.out.println();
-        
-        System.out.flush();
-        System.setOut(old);
-        
-        return baos.toString();
+    	try {
+
+            body = new Body(EnumWorldAccessMethod.valueOf(accessMethod));
+        } catch (Exception e){
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            return sw.toString();
+        }
+    	return "";
 	}
 	
 	@GET

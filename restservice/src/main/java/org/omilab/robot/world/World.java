@@ -6,7 +6,12 @@ import org.omilab.robot.interfaces.bodyworld.EnumMotorDirection;
 import org.omilab.robot.interfaces.bodyworld.EnumServoAngle;
 import org.omilab.robot.interfaces.bodyworld.EnumWorldAccessMethod;
 
+import java.io.IOException;
+import java.util.logging.Logger;
+
 public class World implements BodyWorldInterface {
+	private static final Logger log= Logger.getLogger( World.class.getName() );
+
 	private EnumWorldAccessMethod accessmethod;
 	private CSVReadTool csvReadTool;
 	private SocketClient robot;
@@ -34,7 +39,7 @@ public class World implements BodyWorldInterface {
 			break;
 		
 		case TESTDATA:
-			System.out.println("> Create wav file on server!");
+			log.info("> Create wav file on server!");
 			break;
 			
 		}
@@ -52,9 +57,9 @@ public class World implements BodyWorldInterface {
 		
 		case TESTDATA:
 			if (on == true)
-				System.out.println("> Enable audio stream from server!");
+				log.info("> Enable audio stream from server!");
 			else
-				System.out.println("> Disable audio stream from server!");
+				log.info("> Disable audio stream from server!");
 			break;
 			
 		}
@@ -68,11 +73,11 @@ public class World implements BodyWorldInterface {
 			else if (number == 1)
 				robot.muxI2C((short) 0x40);
 			else
-				System.out.println("> Cannot translate number to MUX address!");
+				log.info("> Cannot translate number to MUX address!");
 			break;
 		
 		case TESTDATA:
-			System.out.println("> MUX color sensor i2c on server to " + Short.toString(number) + "!");
+			log.info("> MUX color sensor i2c on server to " + Short.toString(number) + "!");
 			break;
 			
 		}
@@ -86,15 +91,16 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.println("> Set the 8x8 matrix on the server to: ");
+			log.info("> Set the 8x8 matrix on the server to: ");
+			StringBuilder sb=new StringBuilder();
 			for (int i=0; i < 8; i++) {
-				System.out.print(">> ");
-				for (int j=0; j < 8; j++) 
-					System.out.print(matrix[i][j]);
-				System.out.println();
+				sb.append(">> ");
+				for (int j=0; j < 8; j++)
+					sb.append(matrix[i][j]);
+				sb.append(System.lineSeparator());
 			}
+			log.info(sb.toString());
 			break;
-			
 		}
 	}
 
@@ -107,7 +113,7 @@ public class World implements BodyWorldInterface {
 			break;
 		
 		case TESTDATA:
-		System.out.println("> Starting distance measurement on the server!");
+		log.info("> Starting distance measurement on the server!");
 			break;
 			
 		}
@@ -121,7 +127,7 @@ public class World implements BodyWorldInterface {
 			break;
 		
 		case TESTDATA:
-			System.out.println("> Set the LCD on the server to '" + text + "'!");
+			log.info("> Set the LCD on the server to '" + text + "'!");
 			break;
 			
 		}
@@ -143,7 +149,7 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.println("> Issue Motor Command on Server: Motor " + Integer.toString(number) + ", Direction " + Direction.toString() + ", Speed " + Integer.toString(speed)+"!");
+			log.info("> Issue Motor Command on Server: Motor " + Integer.toString(number) + ", Direction " + Direction.toString() + ", Speed " + Integer.toString(speed)+"!");
 			break;
 		}
 	}
@@ -156,7 +162,7 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.println("> Buzz on Server with Freq "+Integer.toString(hz)+"!");
+			log.info("> Buzz on Server with Freq "+Integer.toString(hz)+"!");
 			break;
 			
 		}
@@ -170,7 +176,7 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.println("> Create jpg file on server");
+			log.info("> Create jpg file on server");
 			break;
 			
 		}
@@ -188,9 +194,9 @@ public class World implements BodyWorldInterface {
 			
 		case TESTDATA:
 			if (on == true)
-				System.out.println("> Enable video stream on server");
+				log.info("> Enable video stream on server");
 			else
-				System.out.println("> Disable video stream on server");
+				log.info("> Disable video stream on server");
 			break;
 		}	
 	}
@@ -200,7 +206,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public short[] senseRotGyrAcc() {
+	public short[] senseRotGyrAcc() throws IOException {
 		short[] ret = {0,0,0,0,0,0,0,0};
 		
 		switch(accessmethod) {
@@ -209,26 +215,22 @@ public class World implements BodyWorldInterface {
 			break; 
 			
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
-				System.out.print(Element+" -> RotGyrAcc");
-	
+				log.info(Element+" -> RotGyrAcc");
 				String[] Values = Element.split(",");
 				for (int i = 0; i < Values.length; i++)
 					ret[i] = (short) Integer.parseInt(Values[i]);
 				
 			}
-			System.out.println();
 			break;
-			
 		}
 		return ret;
 		
 	}
 
 	@Override
-	public short[] senseAnalogLineSensors() {
+	public short[] senseAnalogLineSensors() throws IOException {
 		short[] ret = {0,0,0,0};
 		
 		switch(accessmethod) {
@@ -237,28 +239,26 @@ public class World implements BodyWorldInterface {
 			break;
 
 		case TESTDATA:
-			System.out.print("> ");
-
+			StringBuilder sb=new StringBuilder();
+			sb.append("> ");
 			String Element = csvReadTool.readLineElement();
 	
 			if (Element != null) {
 				String[] Values = Element.split(",");
 				for (int i = 0; i < Values.length; i++) {
-					System.out.print(Values[i]+" -> ALS"+Integer.toString(i)+" ");
+					sb.append(Values[i]+" -> ALS"+Integer.toString(i)+" ");
 					ret[i] = Short.parseShort(Values[i]);
 				}
 			}
-			
-			System.out.println();
+			sb.append(System.lineSeparator());
+			log.info(sb.toString());
 			break;
-			
 		}
-		
 		return ret;
 	}
 
 	@Override
-	public short[] senseAnalogWheelRotationSensors() {
+	public short[] senseAnalogWheelRotationSensors() throws IOException {
 		short[] ret = {0,0,0,0};
 		
 		switch(accessmethod) {
@@ -267,78 +267,63 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.print("> ");
-
+			StringBuilder sb=new StringBuilder();
+			sb.append("> ");
 			String Element = csvReadTool.readLineElement();
-	
 			if (Element != null) {
-				String[] Values = Element.split(",");
-				for (int i = 0; i < Values.length; i++) {
-					System.out.print(Values[i]+" -> WRS"+Integer.toString(i)+" ");
-					ret[i] = Short.parseShort(Values[i]);
+				String[] values = Element.split(",");
+				for (int i = 0; i < values.length; i++) {
+					sb.append(values[i]+" -> WRS"+Integer.toString(i)+" ");
+					ret[i] = Short.parseShort(values[i]);
 				}
 			}
-			
-			System.out.println();
+			sb.append(System.lineSeparator());
 			break;
 		}
-			
 		return ret;
 	}
 
 	@Override
-	public String senseAudioMic() {
+	public String senseAudioMic() throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(copySoundPath);
 		sb.insert(copySoundPath.indexOf('.'), Integer.toString(soundNumber++));
-		
 		switch(accessmethod) {
-		case SOCKET:
-			robot.sendSound(sb.toString());
-			break;
-			
-		case TESTDATA:
-			System.out.print("> ");
-			String Element = csvReadTool.readLineElement();
-			if (Element != null) {
-				System.out.println(Element+" -> AudioMic");
-			}
-			break;
-
+			case SOCKET:
+				robot.sendSound(sb.toString());
+				break;
+			case TESTDATA:
+				String Element = csvReadTool.readLineElement();
+				if (Element != null) {
+					log.info(Element+" -> AudioMic"+System.lineSeparator());
+				}
+				break;
 		}
-		
 		return sb.toString();
 	}
 
 	@Override
-	public short[] senseColor() {
+	public short[] senseColor() throws IOException {
 		short[] ret = {0,0,0,0,0,0};
-		
 		switch(accessmethod) {
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
-				System.out.print(Element+" -> CS");
-
+				log.info(Element+" -> CS");
 				String[] Values = Element.split(",");
 				for (int i = 0; i < Values.length; i++)
 					ret[i] = Short.parseShort(Values[i]);
-				
 			}
-			System.out.println();
 			break;
-			
 		case SOCKET:
 			ret = robot.getColorSensorValues();
 			break;
 		}
-		
 		return ret;	
 	}
 
 	@Override
-	public boolean[] senseDigitalLineSensors() {
+	public boolean[] senseDigitalLineSensors() throws IOException {
 		short[] values = {0,0,0,0};
 		boolean[] ret = {false,false,false,false};
 		
@@ -354,51 +339,43 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.print("> ");
-
+			StringBuilder sb = new StringBuilder();
+			sb.append("> ");
 			String Element = csvReadTool.readLineElement();
-			
 			if (Element != null) {
-				String[] Values = Element.split(",");
-				for (int i = 0; i < Values.length; i++) {
-					System.out.print(Values[i]+" -> ALS"+Integer.toString(i)+" ");
-					ret[i] = Values[i].compareTo("true") == 0;
+				String[] tValues = Element.split(",");
+				for (int i = 0; i < tValues.length; i++) {
+					sb.append(tValues[i]+" -> ALS"+Integer.toString(i)+" ");
+					ret[i] = tValues[i].compareTo("true") == 0;
 				}
 			}
-			
-			System.out.println();
+			log.info(sb.toString());
 			break;
-			
 		}
-		
 		return ret;
 	}
 
 	@Override
-	public short senseDistance() {
+	public short senseDistance() throws IOException {
 		short ret = -1;
 		
 		switch(accessmethod) {
 		case SOCKET:
 			ret = robot.getDistance();
 			break;
-			
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
-				System.out.println(Element+" -> DS");
+				log.info(Element+" -> DS");
 				ret = Short.parseShort(Element);
 			}
 			break;
-			
 		}
-		
 		return ret;
 	}
 
 	@Override
-	public short[] senseHeadingMag() {
+	public short[] senseHeadingMag() throws IOException {
 		short[] ret = {-1,-1,-1,-1,-1,-1};
 		
 		switch(accessmethod) {
@@ -407,25 +384,20 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
-				System.out.print(Element+" -> Heading");
-	
+				log.info(Element+" -> Heading");
 				String[] Values = Element.split(",");
 				for (int i = 0; i < Values.length; i++)
 					ret[i] = (short) Integer.parseInt(Values[i]);
-				
 			}
-			System.out.println();
 			break;
 		}
-		
 		return ret;
 	}
 
 	@Override
-	public boolean senseDigitalNoise() {
+	public boolean senseDigitalNoise() throws IOException {
 		boolean ret = false;
 		
 		switch(accessmethod) {
@@ -434,10 +406,9 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
-				System.out.println(Element+" -> Noise Sensor");
+				log.info(Element+" -> Noise Sensor");
 				if (Element.compareTo("true") == 0)
 					ret = true;
 			}
@@ -448,7 +419,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public String senseVisionCamera() {
+	public String senseVisionCamera() throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append(copyImagePath);
 		sb.insert(copyImagePath.indexOf('.'), Integer.toString(imageNumber++));
@@ -459,11 +430,9 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) 
-				System.out.print(Element+" -> Vision ");
-			System.out.println();
+				log.info(Element+" -> Vision ");
 			break;
 		}
 		
@@ -471,15 +440,13 @@ public class World implements BodyWorldInterface {
 	}
 
 	public void setAccessmethod(EnumWorldAccessMethod AccessMethod) {
-		System.out.println("Initiating Client ...");
 		this.accessmethod = AccessMethod;
-		System.out.println("Access Method is " + this.accessmethod.toString() + " ...");
-		
+		log.info("Access Method is: \"" + this.accessmethod.toString()+"\"");
 		motorparam = new int[][] {{0,0}, {0,0}, {0,0}, {0,0}};
 
 		switch(AccessMethod) {
 		case SOCKET:
-			System.out.println("Initiating Server ...");
+			log.info("Initiating Server ...");
 			//pysocket.py should be running at this point
 			dlsLowValueThreshold = 1000;
 			robot = new SocketClient();
@@ -487,10 +454,8 @@ public class World implements BodyWorldInterface {
 			break;
 		
 		case TESTDATA:
-			System.out.println("Initiating Test Environment ...");
-			csvReadTool = new CSVReadTool();
-			if (!csvReadTool.openFile("testdata.csv"))
-				System.out.println("Problem opening testdata file " + getClass().getResourceAsStream("/testdata.csv") + "!");
+			log.info("Initiating Test Environment ...");
+			csvReadTool = new CSVReadTool("testdata.csv");
 			break;
 			
 		case COMMANDLINE:
@@ -500,8 +465,6 @@ public class World implements BodyWorldInterface {
 		case JYTHON:
 			//JYTHON is not enabled as i could not find out how to import e.g., ioctl easily
 		}
-
-		System.out.println("Done!");
 	}
 
 	public void setPufferMotorCommand(boolean pufferMotorCommand) {
@@ -516,7 +479,7 @@ public class World implements BodyWorldInterface {
 			break;	
 			
 		case TESTDATA:
-			System.out.println("> Move servo on server: Servo " + Integer.toString(channel) + ", Rotation " + ServoAngle.name()+"!");
+			log.info("> Move servo on server: Servo " + Integer.toString(channel) + ", Rotation " + ServoAngle.name()+"!");
 			break;
 		}
 	}
@@ -529,13 +492,13 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.println("> Playing wav file");
+			log.info("> Playing wav file");
 			break;
 		}
 	}
 
 	@Override
-	public void actPlaySound(String escapedPathAndFilename) {
+	public void actPlaySound(String escapedPathAndFilename) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.receiveSound(escapedPathAndFilename);
@@ -543,10 +506,9 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.println("> Copying wav file");
-			System.out.println("> Playing wav file");
+			log.info("> Copying wav file");
+			log.info("> Playing wav file");
 			break;
-		
 		}
 	}
 
@@ -558,15 +520,13 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.println("> Enabling laser on server");
+			log.info("> Enabling laser on server");
 			break;
-			
 		}
-		
 	}
 
 	@Override
-	public short senseTemp() {
+	public short senseTemp() throws IOException {
 		short ret = -1;
 		
 		switch(accessmethod) {
@@ -575,36 +535,31 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
-				System.out.println(Element+" -> Temperature Sensor");
+				log.info(Element+" -> Temperature Sensor");
 				ret = Short.parseShort(Element);
 			}
 			break;
-			
 		}
-		
 		return ret;
 	}
 
 	@Override
 	public void death() {
 		switch(accessmethod) {
-		case SOCKET:
-			robot.quit();
-			break;
-			
-		case TESTDATA:
-			System.out.print("> Shutting Down!");
-			break;
-			
+			case SOCKET:
+				robot.quit();
+				break;
+
+			case TESTDATA:
+				log.info("> Shutting Down!");
+				break;
 		}
-		
 	}
 
 	@Override
-	public short senseAnalogNoise() {
+	public short senseAnalogNoise() throws IOException {
 		short ret = -1;
 				
 		switch(accessmethod) {
@@ -613,15 +568,13 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case TESTDATA:
-			System.out.print("> ");
 			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
-				System.out.println(Element+" -> Noise Sensor");
+				log.info(Element+" -> Noise Sensor");
 				ret = Short.parseShort(Element);
 			}
 			break;
 		}
-		
 		return ret;
 	}
 	

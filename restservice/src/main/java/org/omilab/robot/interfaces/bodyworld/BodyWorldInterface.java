@@ -1,5 +1,7 @@
 package org.omilab.robot.interfaces.bodyworld;
 
+import java.io.IOException;
+
 public interface BodyWorldInterface {
 	//void actVisionCaptureAreal(); //TODO
 	//void actVisionStreamAreal(); //TODO
@@ -10,7 +12,7 @@ public interface BodyWorldInterface {
 	/**
 	 * Starts recording a wav file
 	 * 
-	 * @param duration
+	 * @param seconds
 	 *            Recording time in milliseconds
 	 */
 	void actAudioCaptureMic(short seconds);
@@ -90,7 +92,7 @@ public interface BodyWorldInterface {
 	/**
 	 * Transfers a WAV file and plays it
 	 */
-	void actPlaySound(String escapedPathAndFilename);
+	void actPlaySound(String escapedPathAndFilename) throws IOException;
 
 	/**
 	 * Controls the Servo Motors
@@ -126,38 +128,36 @@ public interface BodyWorldInterface {
 	 * 
 	 * @return Data from 4 line/reflection sensors (left to right)
 	 */
-	short[] senseAnalogLineSensors();
+	short[] senseAnalogLineSensors() throws IOException;
 	
 	/**
 	 * Senses Noise
 	 * 
 	 * @return Unsigned short noise value
 	 */
-	short senseAnalogNoise();
+	short senseAnalogNoise() throws IOException;
 
 	/**
 	 * Senses 4 line/reflection sensors
 	 * 
 	 * @return Data from 4 line/reflection sensors (left to right)
 	 */
-	short[] senseAnalogWheelRotationSensors();
+	short[] senseAnalogWheelRotationSensors() throws IOException;
 
 	/**
 	 * Senses the wav file from the last actAudioCaptureMic() call
 	 * 
 	 * @return Path to file
 	 */
-	String senseAudioMic();
+	String senseAudioMic() throws IOException;
 
 	/**
 	 * Senses the color sensor selected by actColorSensors(short number); Sensor
 	 * performs better with longer measurement duration.
-	 * 
-	 * @param duration
-	 *            Measurement time in milliseconds
+	 *
 	 * @return [c,r,g,b,kelvin,lux] Kelvin & Lux are unsigned shorts
 	 */
-	short[] senseColor();
+	short[] senseColor() throws IOException;
 
 	/**
 	 * Senses 4 line/reflection sensors
@@ -165,28 +165,28 @@ public interface BodyWorldInterface {
 	 * @return Data from 4 line/reflection sensors (left to right, true := line
 	 *         detected, no reflection)
 	 */
-	boolean[] senseDigitalLineSensors();
+	boolean[] senseDigitalLineSensors() throws IOException;
 
 	/**
 	 * Senses distance data since last ActDistance() call
 	 * 
 	 * @return
 	 */
-	short senseDistance();
+	short senseDistance() throws IOException;
 
 	/**
 	 * Senses Magnetometer Data
 	 * 
 	 * @return
 	 */
-	short[] senseHeadingMag();
+	short[] senseHeadingMag() throws IOException;
 
 	/**
 	 * Senses Noise
 	 * 
 	 * @return
 	 */
-	boolean senseDigitalNoise();
+	boolean senseDigitalNoise() throws IOException;
 
 	/**
 	 * Senses accelerometer
@@ -194,19 +194,19 @@ public interface BodyWorldInterface {
 	 * @return Data from accelerometer: xrot, yrot, xgyr, ygyr, zgyr, xacc,
 	 *         yacc, zacc
 	 */
-	short[] senseRotGyrAcc();
+	short[] senseRotGyrAcc() throws IOException;
 	
 	/**
 	 * Senses Temperature
 	 * 
 	 * @return Unsigned short value in Celsius
 	 */
-	short senseTemp();
+	short senseTemp() throws IOException;
 
 	/**
 	 * Senses the picture from the last actVisionCaptureCamera() call
 	 * 
 	 * @return Path to file
 	 */
-	String senseVisionCamera();
+	String senseVisionCamera() throws IOException;
 }

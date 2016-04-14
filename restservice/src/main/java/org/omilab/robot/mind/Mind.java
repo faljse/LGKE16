@@ -2,6 +2,8 @@ package org.omilab.robot.mind;
 import org.omilab.robot.body.Body;
 import org.omilab.robot.interfaces.mindbody.*;
 
+import java.io.IOException;
+
 public class Mind implements MindBodyInterface {
 	private ProximityModelMind proximityModelMind;
 	private MoveModelMind moveModelMind;
@@ -70,7 +72,7 @@ public class Mind implements MindBodyInterface {
 		return visionModelMind;
 	}
 	
-	public void startIntelligence() {
+	public void startIntelligence() throws IOException {
 		desymbolizeProximityModel();
 		symbolizeProximityModel();
 		
@@ -127,7 +129,7 @@ public class Mind implements MindBodyInterface {
 	}
 
 	@Override
-	public void symbolizeAudioModel() {
+	public void symbolizeAudioModel() throws IOException {
 		bodyRepresentation.symbolizeAudioModel();
 		audioModelMind.setStreaming(bodyRepresentation.getAudioModelBody().isStreaming());
 		if (!audioModelMind.isStreaming())
@@ -145,7 +147,7 @@ public class Mind implements MindBodyInterface {
 	}
 
 	@Override
-	public void symbolizeProximityModel() {
+	public void symbolizeProximityModel() throws IOException {
 		bodyRepresentation.symbolizeProximityModel();
 		
 		proximityModelMind.setLeftInnerReflection(bodyRepresentation.getProximityModelBody().hasLeftInnerReflection());
@@ -169,7 +171,7 @@ public class Mind implements MindBodyInterface {
 	}
 
 	@Override
-	public void symbolizeVisionModel() {
+	public void symbolizeVisionModel() throws IOException {
 		bodyRepresentation.symbolizeVisionModel();
 		visionModelMind.setStreaming(bodyRepresentation.getVisionModelBody().isStreaming());
 		if (!visionModelMind.isStreaming())

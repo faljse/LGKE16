@@ -8,24 +8,16 @@ public class CSVReadTool {
 	private BufferedReader br;
 	private String[] line;
 	private int elementnumber;
-	
-	public boolean openFile(String csvFile) {
-		br = null;
 
+	CSVReadTool(String csvFile){
 		br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/"+csvFile)));
-		
-		if (br != null)
-			return nextLine();
-		return false;
 	}
 
 	public boolean closeFile(String csvFile) {
 		if (br != null) {
 			try {
-				
 				br.close();
 				return true;
-				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -33,23 +25,20 @@ public class CSVReadTool {
 		return false;
 	}
 	
-	//only to be called after openFile()
-	public String readLineElement() {
+	public String readLineElement() throws IOException {
 		if (line != null && elementnumber >= line.length)
 			nextLine();
 		
 		if (line != null && elementnumber < line.length) {
 			return line[elementnumber++];
 		}
-		
 		return null;
 	}
 	
-	public boolean nextLine() {
+	public boolean nextLine() throws IOException {
 		String cvsSplitBy = ";";
 		String wholeLine;
-		try {
-			
+
 			if ((wholeLine = br.readLine()) != null) {
 				line = wholeLine.split(cvsSplitBy);
 				elementnumber = 0;
@@ -59,10 +48,6 @@ public class CSVReadTool {
 				line = null;
 				elementnumber = -1;
 			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		System.out.println("");
 		System.out.println("eof");
 		System.out.println("");
