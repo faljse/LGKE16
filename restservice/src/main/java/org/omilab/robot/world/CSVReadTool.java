@@ -1,14 +1,12 @@
 package org.omilab.robot.world;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class CSVReadTool {
 	private BufferedReader br;
-	private String[] Line;
+	private String[] line;
 	private int elementnumber;
 	
 	public boolean openFile(String csvFile) {
@@ -37,11 +35,11 @@ public class CSVReadTool {
 	
 	//only to be called after openFile()
 	public String readLineElement() {
-		if (Line != null && elementnumber >= Line.length) 
+		if (line != null && elementnumber >= line.length)
 			nextLine();
 		
-		if (Line != null && elementnumber < Line.length) {
-			return Line[elementnumber++];
+		if (line != null && elementnumber < line.length) {
+			return line[elementnumber++];
 		}
 		
 		return null;
@@ -49,16 +47,16 @@ public class CSVReadTool {
 	
 	public boolean nextLine() {
 		String cvsSplitBy = ";";
-		String WholeLine;
+		String wholeLine;
 		try {
 			
-			if ((WholeLine = br.readLine()) != null) {
-				Line = WholeLine.split(cvsSplitBy);
+			if ((wholeLine = br.readLine()) != null) {
+				line = wholeLine.split(cvsSplitBy);
 				elementnumber = 0;
 				return true;
 			}
 			else
-				Line = null;
+				line = null;
 				elementnumber = -1;
 			
 		} catch (IOException e) {

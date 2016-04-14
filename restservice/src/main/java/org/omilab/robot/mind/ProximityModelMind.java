@@ -51,35 +51,35 @@ public class ProximityModelMind {
 	public static int RGBRIGHT = 4;
 	
 	private int activeRgb;
-	private Rgb RgbFront;
-	private Rgb RgbBack;
-	private Rgb RgbLeft;
-	private Rgb RgbRight;
-	private RotGyrAcc RotGyrAcc;
-	private Heading Heading;
+	private Rgb rgbFront;
+	private Rgb rgbBack;
+	private Rgb rgbLeft;
+	private Rgb rgbRight;
+	private RotGyrAcc rotGyrAcc;
+	private Heading heading;
 	
 	private float distance; //value in cm
 	
 	public ProximityModelMind () {
-		RgbFront  = new Rgb();
-		RgbBack  = new Rgb();
-		RgbLeft  = new Rgb();
-		RgbRight  = new Rgb();
-		RotGyrAcc = new RotGyrAcc();
-		Heading = new Heading();
+		rgbFront = new Rgb();
+		rgbBack = new Rgb();
+		rgbLeft = new Rgb();
+		rgbRight = new Rgb();
+		rotGyrAcc = new RotGyrAcc();
+		heading = new Heading();
 		setActiveRgb(1);
 	}
 	
 	public int[] getHeading() {
 		int ret[] = new int[2];
-		ret[0] = Heading.min;
-		ret[1] = Heading.sec;
+		ret[0] = heading.min;
+		ret[1] = heading.sec;
 		return ret;
 	}
 
 	public void setHeading(int min, int sec) {
-		Heading.min = min;
-		Heading.sec = sec;
+		heading.min = min;
+		heading.sec = sec;
 	}
 
 	public boolean hasLeftOuterReflection() {
@@ -133,10 +133,10 @@ public class ProximityModelMind {
 	public int[] getRgb() {
 		Rgb Rgb = null;
 		switch(activeRgb) {
-			case 1: Rgb = RgbFront; break;
-			case 2: Rgb = RgbBack; break;
-			case 3: Rgb = RgbLeft; break;
-			case 4: Rgb = RgbRight; break;
+			case 1: Rgb = rgbFront; break;
+			case 2: Rgb = rgbBack; break;
+			case 3: Rgb = rgbLeft; break;
+			case 4: Rgb = rgbRight; break;
 		}
 		int ret[] = new int[5];
 		ret[0] = Rgb.c;
@@ -150,10 +150,10 @@ public class ProximityModelMind {
 	public void setRgb(int c, int r, int g, int b, int lux, int colortemp) {
 		Rgb Rgb = null;
 		switch(activeRgb) {
-			case 1: Rgb = RgbFront; break;
-			case 2: Rgb = RgbBack; break;
-			case 3: Rgb = RgbLeft; break;
-			case 4: Rgb = RgbRight; break;
+			case 1: Rgb = rgbFront; break;
+			case 2: Rgb = rgbBack; break;
+			case 3: Rgb = rgbLeft; break;
+			case 4: Rgb = rgbRight; break;
 		}
 		Rgb.c = c;
 		Rgb.r = r;
@@ -176,26 +176,26 @@ public class ProximityModelMind {
 	}
 	
 	public void setRotGyrAcc(float xrot, float yrot, float xgyr, float ygyr, float zgyr, float xacc, float yacc, float zacc) {
-		RotGyrAcc.xrot = xrot;
-		RotGyrAcc.yrot = yrot;
-		RotGyrAcc.xgyr = xgyr;
-		RotGyrAcc.ygyr = ygyr;
-		RotGyrAcc.zgyr = zgyr;
-		RotGyrAcc.xacc = xacc;
-		RotGyrAcc.yacc = yacc;
-		RotGyrAcc.zacc = zacc;
+		rotGyrAcc.xrot = xrot;
+		rotGyrAcc.yrot = yrot;
+		rotGyrAcc.xgyr = xgyr;
+		rotGyrAcc.ygyr = ygyr;
+		rotGyrAcc.zgyr = zgyr;
+		rotGyrAcc.xacc = xacc;
+		rotGyrAcc.yacc = yacc;
+		rotGyrAcc.zacc = zacc;
 	}
 	public float[] getRotGyrAcc() {
 		float ret[] = new float[8];
 		
-		ret[0] = RotGyrAcc.xrot;
-		ret[1] = RotGyrAcc.yrot;
-		ret[2] = RotGyrAcc.xgyr;
-		ret[3] = RotGyrAcc.ygyr;
-		ret[4] = RotGyrAcc.zgyr;
-		ret[5] = RotGyrAcc.xacc;
-		ret[6] = RotGyrAcc.yacc;
-		ret[7] = RotGyrAcc.zacc;
+		ret[0] = rotGyrAcc.xrot;
+		ret[1] = rotGyrAcc.yrot;
+		ret[2] = rotGyrAcc.xgyr;
+		ret[3] = rotGyrAcc.ygyr;
+		ret[4] = rotGyrAcc.zgyr;
+		ret[5] = rotGyrAcc.xacc;
+		ret[6] = rotGyrAcc.yacc;
+		ret[7] = rotGyrAcc.zacc;
 		
 		return ret;
 	}

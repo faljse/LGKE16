@@ -5,18 +5,16 @@ import org.omilab.robot.interfaces.bodyworld.BodyWorldInterface;
 import org.omilab.robot.interfaces.bodyworld.EnumMotorDirection;
 import org.omilab.robot.interfaces.bodyworld.EnumServoAngle;
 import org.omilab.robot.interfaces.bodyworld.EnumWorldAccessMethod;
-import org.omilab.robot.world.CSVReadTool;
-import org.omilab.robot.world.SocketClient;
 
 public class World implements BodyWorldInterface {
-	private EnumWorldAccessMethod AccessMethod;
-	private CSVReadTool CSVReadTool;
-	private SocketClient Robot;
-	private Body BackdoorAccess;
+	private EnumWorldAccessMethod accessmethod;
+	private CSVReadTool csvReadTool;
+	private SocketClient robot;
+	private Body backdoorAccess;
 	
 	boolean pufferMotorCommand;
 	int[][] motorparam;
-	int DLSLowValueThreshold;
+	int dlsLowValueThreshold;
 	
 	public String copyImagePath = "images/image.jpg";
 	public String copySoundPath = "sounds/sound.wav";
@@ -30,9 +28,9 @@ public class World implements BodyWorldInterface {
 	
 	@Override
 	public void actAudioCaptureMic(short seconds) {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.recordMicWAV(seconds);
+			robot.recordMicWAV(seconds);
 			break;
 		
 		case TESTDATA:
@@ -44,12 +42,12 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actAudioStreamMic(boolean on, String address) {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
 			if (on == true)
-				Robot.enableAudioStream(address);
+				robot.enableAudioStream(address);
 			else
-				Robot.disableAudioStream(address);
+				robot.disableAudioStream(address);
 			break;
 		
 		case TESTDATA:
@@ -63,12 +61,12 @@ public class World implements BodyWorldInterface {
 	}
 
 	public void actColorSensors(short number) {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
 			if (number == 0)
-				Robot.muxI2C((short) 0x80);
+				robot.muxI2C((short) 0x80);
 			else if (number == 1)
-				Robot.muxI2C((short) 0x40);
+				robot.muxI2C((short) 0x40);
 			else
 				System.out.println("> Cannot translate number to MUX address!");
 			break;
@@ -82,9 +80,9 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actDisplay(short[][] matrix) {
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.setRGBMatrix(matrix);
+			robot.setRGBMatrix(matrix);
 			break;
 			
 		case TESTDATA:
@@ -102,7 +100,7 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actDistance() {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
 			//Would be required if, e.g., pings were aggregated or if the the application were really, really time critical.
 			//Would issue a ping and the echo would be detected in senseDistance
@@ -117,9 +115,9 @@ public class World implements BodyWorldInterface {
 	
 	@Override
 	public void actLCD(String text, short[] color) {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.setLCDDisplay(text, color);
+			robot.setLCDDisplay(text, color);
 			break;
 		
 		case TESTDATA:
@@ -131,7 +129,7 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actMotor(short number, EnumMotorDirection Direction, short speed) {
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
 			if (pufferMotorCommand) {
 				motorparam[number-1][0] = speed;
@@ -140,7 +138,7 @@ public class World implements BodyWorldInterface {
 			else {
 				motorparam[number-1][0] = speed;
 				motorparam[number-1][1] = Direction.ordinal() + 1;
-				Robot.drive((short) motorparam[0][0], (short)motorparam[0][1], (short)motorparam[1][0], (short)motorparam[1][1], (short)motorparam[2][0], (short)motorparam[2][1], (short)motorparam[3][0], (short)motorparam[3][1]);
+				robot.drive((short) motorparam[0][0], (short)motorparam[0][1], (short)motorparam[1][0], (short)motorparam[1][1], (short)motorparam[2][0], (short)motorparam[2][1], (short)motorparam[3][0], (short)motorparam[3][1]);
 			}
 			break;
 			
@@ -152,9 +150,9 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actNoise(short hz) {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.buzz(hz);
+			robot.buzz(hz);
 			break;
 			
 		case TESTDATA:
@@ -166,9 +164,9 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actVisionCaptureCamera() {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.recordCameraJPG();
+			robot.recordCameraJPG();
 			break;
 			
 		case TESTDATA:
@@ -180,12 +178,12 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actVisionStreamCamera(boolean on, String address) {
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
 			if (on == true)
-				Robot.enableVideoStream(address);
+				robot.enableVideoStream(address);
 			else
-				Robot.disableVideoStream(address);
+				robot.disableVideoStream(address);
 			break;
 			
 		case TESTDATA:
@@ -205,14 +203,14 @@ public class World implements BodyWorldInterface {
 	public short[] senseRotGyrAcc() {
 		short[] ret = {0,0,0,0,0,0,0,0};
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			ret = Robot.getRotationGyroAccelerometer();
+			ret = robot.getRotationGyroAccelerometer();
 			break; 
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.print(Element+" -> RotGyrAcc");
 	
@@ -233,15 +231,15 @@ public class World implements BodyWorldInterface {
 	public short[] senseAnalogLineSensors() {
 		short[] ret = {0,0,0,0};
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			ret = Robot.getADCAllChannelValues('3');
+			ret = robot.getADCAllChannelValues('3');
 			break;
 
 		case TESTDATA:
 			System.out.print("> ");
 
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 	
 			if (Element != null) {
 				String[] Values = Element.split(",");
@@ -263,7 +261,7 @@ public class World implements BodyWorldInterface {
 	public short[] senseAnalogWheelRotationSensors() {
 		short[] ret = {0,0,0,0};
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
 			// TODO adc1
 			break;
@@ -271,7 +269,7 @@ public class World implements BodyWorldInterface {
 		case TESTDATA:
 			System.out.print("> ");
 
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 	
 			if (Element != null) {
 				String[] Values = Element.split(",");
@@ -294,14 +292,14 @@ public class World implements BodyWorldInterface {
 		sb.append(copySoundPath);
 		sb.insert(copySoundPath.indexOf('.'), Integer.toString(soundNumber++));
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.sendSound(sb.toString());
+			robot.sendSound(sb.toString());
 			break;
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.println(Element+" -> AudioMic");
 			}
@@ -316,10 +314,10 @@ public class World implements BodyWorldInterface {
 	public short[] senseColor() {
 		short[] ret = {0,0,0,0,0,0};
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.print(Element+" -> CS");
 
@@ -332,7 +330,7 @@ public class World implements BodyWorldInterface {
 			break;
 			
 		case SOCKET:
-			ret = Robot.getColorSensorValues();
+			ret = robot.getColorSensorValues();
 			break;
 		}
 		
@@ -344,11 +342,11 @@ public class World implements BodyWorldInterface {
 		short[] values = {0,0,0,0};
 		boolean[] ret = {false,false,false,false};
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			values = Robot.getADCAllChannelValues('2');
+			values = robot.getADCAllChannelValues('2');
 			for (int number=0; number < 4; number++) {
-				if (values[number] > DLSLowValueThreshold) // High reflection Value = no black line detected
+				if (values[number] > dlsLowValueThreshold) // High reflection Value = no black line detected
 					ret[number] = false; // no line detected
 				else
 					ret[number] = true; //line detected
@@ -358,7 +356,7 @@ public class World implements BodyWorldInterface {
 		case TESTDATA:
 			System.out.print("> ");
 
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			
 			if (Element != null) {
 				String[] Values = Element.split(",");
@@ -380,14 +378,14 @@ public class World implements BodyWorldInterface {
 	public short senseDistance() {
 		short ret = -1;
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			ret = Robot.getDistance();
+			ret = robot.getDistance();
 			break;
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.println(Element+" -> DS");
 				ret = Short.parseShort(Element);
@@ -403,14 +401,14 @@ public class World implements BodyWorldInterface {
 	public short[] senseHeadingMag() {
 		short[] ret = {-1,-1,-1,-1,-1,-1};
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			ret = Robot.getHeading();
+			ret = robot.getHeading();
 			break;
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.print(Element+" -> Heading");
 	
@@ -430,14 +428,14 @@ public class World implements BodyWorldInterface {
 	public boolean senseDigitalNoise() {
 		boolean ret = false;
 		
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			ret = Robot.digitalNoise();
+			ret = robot.digitalNoise();
 			break;
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.println(Element+" -> Noise Sensor");
 				if (Element.compareTo("true") == 0)
@@ -455,14 +453,14 @@ public class World implements BodyWorldInterface {
 		sb.append(copyImagePath);
 		sb.insert(copyImagePath.indexOf('.'), Integer.toString(imageNumber++));
 		
-		switch(AccessMethod) {
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.sendImage(sb.toString());
+			robot.sendImage(sb.toString());
 			break;
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) 
 				System.out.print(Element+" -> Vision ");
 			System.out.println();
@@ -472,10 +470,10 @@ public class World implements BodyWorldInterface {
 		return sb.toString();
 	}
 
-	public void setAccessMethod(EnumWorldAccessMethod AccessMethod) {
+	public void setAccessmethod(EnumWorldAccessMethod AccessMethod) {
 		System.out.println("Initiating Client ...");
-		this.AccessMethod = AccessMethod;
-		System.out.println("Access Method is " + this.AccessMethod.toString() + " ...");
+		this.accessmethod = AccessMethod;
+		System.out.println("Access Method is " + this.accessmethod.toString() + " ...");
 		
 		motorparam = new int[][] {{0,0}, {0,0}, {0,0}, {0,0}};
 
@@ -483,15 +481,15 @@ public class World implements BodyWorldInterface {
 		case SOCKET:
 			System.out.println("Initiating Server ...");
 			//pysocket.py should be running at this point
-			DLSLowValueThreshold = 1000;
-			Robot = new SocketClient();
-			Robot.initiate();
+			dlsLowValueThreshold = 1000;
+			robot = new SocketClient();
+			robot.initiate();
 			break;
 		
 		case TESTDATA:
 			System.out.println("Initiating Test Environment ...");
-			CSVReadTool = new CSVReadTool();
-			if (!CSVReadTool.openFile("testdata.csv"))
+			csvReadTool = new CSVReadTool();
+			if (!csvReadTool.openFile("testdata.csv"))
 				System.out.println("Problem opening testdata file " + getClass().getResourceAsStream("/testdata.csv") + "!");
 			break;
 			
@@ -512,9 +510,9 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actServo(short channel, EnumServoAngle ServoAngle) {
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.servo(channel, (short) ServoAngle.getValue());
+			robot.servo(channel, (short) ServoAngle.getValue());
 			break;	
 			
 		case TESTDATA:
@@ -525,9 +523,9 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actPlaySound() {
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.playWav();
+			robot.playWav();
 			break;
 			
 		case TESTDATA:
@@ -538,10 +536,10 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actPlaySound(String escapedPathAndFilename) {
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.receiveSound(escapedPathAndFilename);
-			Robot.playWav();
+			robot.receiveSound(escapedPathAndFilename);
+			robot.playWav();
 			break;
 			
 		case TESTDATA:
@@ -554,9 +552,9 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void actLaser(boolean on) {
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.laser(on);
+			robot.laser(on);
 			break;
 			
 		case TESTDATA:
@@ -571,14 +569,14 @@ public class World implements BodyWorldInterface {
 	public short senseTemp() {
 		short ret = -1;
 		
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			ret = Robot.temp();
+			ret = robot.temp();
 			break;
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.println(Element+" -> Temperature Sensor");
 				ret = Short.parseShort(Element);
@@ -592,9 +590,9 @@ public class World implements BodyWorldInterface {
 
 	@Override
 	public void death() {
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			Robot.quit();
+			robot.quit();
 			break;
 			
 		case TESTDATA:
@@ -609,14 +607,14 @@ public class World implements BodyWorldInterface {
 	public short senseAnalogNoise() {
 		short ret = -1;
 				
-		switch(AccessMethod) {	
+		switch(accessmethod) {
 		case SOCKET:
-			ret = Robot.analogNoise();
+			ret = robot.analogNoise();
 			break;
 			
 		case TESTDATA:
 			System.out.print("> ");
-			String Element = CSVReadTool.readLineElement();
+			String Element = csvReadTool.readLineElement();
 			if (Element != null) {
 				System.out.println(Element+" -> Noise Sensor");
 				ret = Short.parseShort(Element);

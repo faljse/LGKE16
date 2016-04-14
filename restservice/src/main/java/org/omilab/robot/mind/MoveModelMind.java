@@ -4,7 +4,7 @@ import org.omilab.robot.interfaces.mindbody.EnumMoveModelArm;
 import org.omilab.robot.interfaces.mindbody.EnumMoveModelDirection;
 
 public class MoveModelMind {
-	private EnumMoveModelDirection Direction;
+	private EnumMoveModelDirection direction;
 	private int speed;
 	
 	private int w1dist;
@@ -12,19 +12,19 @@ public class MoveModelMind {
 	private int w3dist;
 	private int w4dist;
 	
-	private EnumMoveModelArm Gesture;
+	private EnumMoveModelArm gesture;
 	
 	public EnumMoveModelArm getGesture() {
-		return Gesture;
+		return gesture;
 	}
 	public void setGesture(EnumMoveModelArm gesture) {
-		Gesture = gesture;
+		this.gesture = gesture;
 	}
 	public EnumMoveModelDirection getDirection() {
-		return Direction;
+		return direction;
 	}
 	public void setDirection(EnumMoveModelDirection direction) {
-		Direction = direction;
+		this.direction = direction;
 	}
 	public int getSpeed() {
 		return speed;

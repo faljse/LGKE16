@@ -2,11 +2,11 @@ package org.omilab.robot.mind;
 
 public class ExpressionModelMind {
 	private short[][] display;	
-	private String LCD;
-	private int NoiseDuration;
+	private String lcd;
+	private int noiseDuration;
 	
 	private short displayColor;
-	private short[] LCDColor;
+	private short[] lcdColor;
 	private boolean setDisplay;
 	private boolean setLCD;
 	private boolean setNoise;
@@ -88,8 +88,8 @@ public class ExpressionModelMind {
 		setDisplay(DISPLAYBLANK);
 		setDisplayColor(DISPLAYOFF);
 		setFlippedDisplay(false);
-		setLCD("");
-		setLCDColor(LCDCYAN);
+		setLcd("");
+		setLcdColor(LCDCYAN);
 		setSetLCD(false);
 		setSetDisplay(false);
 		setSetNoise(false);
@@ -103,11 +103,11 @@ public class ExpressionModelMind {
 		return displayColor;
 	}
 	
-	public String getLCD() {
-		return LCD;
+	public String getLcd() {
+		return lcd;
 	}
-	public short[] getLCDColor() {
-		return LCDColor;
+	public short[] getLcdColor() {
+		return lcdColor;
 	}
 	public boolean isFlippedDisplay() {
 		return flippedDisplay;
@@ -127,11 +127,11 @@ public class ExpressionModelMind {
 	public void setFlippedDisplay(boolean flippedDisplay) {
 		this.flippedDisplay = flippedDisplay;
 	}
-	public void setLCD(String LCD) {
-		this.LCD = LCD;
+	public void setLcd(String lcd) {
+		this.lcd = lcd;
 	}
-	public void setLCDColor(short[] LCDColor) {
-		this.LCDColor = LCDColor;
+	public void setLcdColor(short[] lcdColor) {
+		this.lcdColor = lcdColor;
 	}
 	public void setSetDisplay(boolean setDisplay) {
 		this.setDisplay = setDisplay;
@@ -140,10 +140,10 @@ public class ExpressionModelMind {
 		this.setLCD = setLCD;
 	}
 	public int getNoiseDuration() {
-		return NoiseDuration;
+		return noiseDuration;
 	}
 	public void setNoiseDuration(int NoiseDuration) {
-		this.NoiseDuration = NoiseDuration;
+		this.noiseDuration = NoiseDuration;
 	}
 	public boolean isSetNoise() {
 		return setNoise;

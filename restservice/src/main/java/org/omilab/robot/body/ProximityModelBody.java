@@ -39,22 +39,22 @@ public class ProximityModelBody {
 	private short rightInnerReflectionValue; //value from 0-3.3v
 	
 	private int activeRgb;
-	private Rgb RgbFront;
-	private Rgb RgbBack;
-	private Rgb RgbLeft;
-	private Rgb RgbRight;
-	private RotGyrAcc RotGyrAcc;
-	private int HeadingMin;
-	private int HeadingSec;
+	private Rgb rgbFront;
+	private Rgb rgbBack;
+	private Rgb rgbLeft;
+	private Rgb rgbRight;
+	private RotGyrAcc rotGyrAcc;
+	private int headingMin;
+	private int headingSec;
 	
 	private short distance; //value in cm
 	
 	public ProximityModelBody () {
-		RgbFront = new Rgb();
-		RgbBack = new Rgb();
-		RgbLeft = new Rgb();
-		RgbRight = new Rgb();
-		RotGyrAcc = new RotGyrAcc();
+		rgbFront = new Rgb();
+		rgbBack = new Rgb();
+		rgbLeft = new Rgb();
+		rgbRight = new Rgb();
+		rotGyrAcc = new RotGyrAcc();
 	}
 	
 	public int getActiveRgb() {
@@ -64,10 +64,10 @@ public class ProximityModelBody {
 		return distance;
 	}
 	public int getHeadingMin() {
-		return HeadingMin;
+		return headingMin;
 	}
 	public int getHeadingSec() {
-		return HeadingSec;
+		return headingSec;
 	}
 	public short getLeftInnerReflectionValue() {
 		return leftInnerReflectionValue;
@@ -78,10 +78,10 @@ public class ProximityModelBody {
 	public short[] getRgb() {
 		Rgb Rgb = null;
 		switch(activeRgb) {
-			case 1: Rgb = RgbFront; break;
-			case 2: Rgb = RgbBack; break;
-			case 3: Rgb = RgbLeft; break;
-			case 4: Rgb = RgbRight; break;
+			case 1: Rgb = rgbFront; break;
+			case 2: Rgb = rgbBack; break;
+			case 3: Rgb = rgbLeft; break;
+			case 4: Rgb = rgbRight; break;
 		}
 		short ret[] = new short[6];
 		ret[0] = Rgb.c;
@@ -101,14 +101,14 @@ public class ProximityModelBody {
 	public short[] getRotGyrAcc() {
 		short ret[] = new short[8];
 		
-		ret[0] = RotGyrAcc.xrot;
-		ret[1] = RotGyrAcc.yrot;
-		ret[2] = RotGyrAcc.xgyr;
-		ret[3] = RotGyrAcc.ygyr;
-		ret[4] = RotGyrAcc.zgyr;
-		ret[5] = RotGyrAcc.xacc;
-		ret[6] = RotGyrAcc.yacc;
-		ret[7] = RotGyrAcc.zacc;
+		ret[0] = rotGyrAcc.xrot;
+		ret[1] = rotGyrAcc.yrot;
+		ret[2] = rotGyrAcc.xgyr;
+		ret[3] = rotGyrAcc.ygyr;
+		ret[4] = rotGyrAcc.zgyr;
+		ret[5] = rotGyrAcc.xacc;
+		ret[6] = rotGyrAcc.yacc;
+		ret[7] = rotGyrAcc.zacc;
 		
 		return ret;
 	}
@@ -131,10 +131,10 @@ public class ProximityModelBody {
 		this.distance = distance;
 	}
 	public void setHeadingMin(int headingMin) {
-		HeadingMin = headingMin;
+		this.headingMin = headingMin;
 	}
 	public void setHeadingSec(int headingSec) {
-		HeadingSec = headingSec;
+		this.headingSec = headingSec;
 	}
 	public void setLeftInnerReflection(boolean leftInnerReflection) {
 		this.leftInnerReflection = leftInnerReflection;
@@ -151,10 +151,10 @@ public class ProximityModelBody {
 	public void setRgb(short c, short r, short g, short b, short lux, short colortemp) {
 		Rgb Rgb = null;
 		switch(activeRgb) {
-			case 1: Rgb = RgbFront; break;
-			case 2: Rgb = RgbBack; break;
-			case 3: Rgb = RgbLeft; break;
-			case 4: Rgb = RgbRight; break;
+			case 1: Rgb = rgbFront; break;
+			case 2: Rgb = rgbBack; break;
+			case 3: Rgb = rgbLeft; break;
+			case 4: Rgb = rgbRight; break;
 		}
 		Rgb.c = c;
 		Rgb.r = r;
@@ -177,14 +177,14 @@ public class ProximityModelBody {
 		this.rightOuterReflectionValue = rightOuterReflectionValue;
 	}
 	public void setRotGyrAcc(short xrot, short yrot, short xgyr, short ygyr, short zgyr, short xacc, short yacc, short zacc) {
-		RotGyrAcc.xrot = xrot;
-		RotGyrAcc.yrot = yrot;
-		RotGyrAcc.xgyr = xgyr;
-		RotGyrAcc.ygyr = ygyr;
-		RotGyrAcc.zgyr = zgyr;
-		RotGyrAcc.xacc = xacc;
-		RotGyrAcc.yacc = yacc;
-		RotGyrAcc.zacc = zacc;
+		rotGyrAcc.xrot = xrot;
+		rotGyrAcc.yrot = yrot;
+		rotGyrAcc.xgyr = xgyr;
+		rotGyrAcc.ygyr = ygyr;
+		rotGyrAcc.zgyr = zgyr;
+		rotGyrAcc.xacc = xacc;
+		rotGyrAcc.yacc = yacc;
+		rotGyrAcc.zacc = zacc;
 	}
 	
 }

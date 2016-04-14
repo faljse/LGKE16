@@ -19,7 +19,7 @@ import org.omilab.robot.interfaces.bodyworld.EnumWorldAccessMethod;
 @Path("/robot")
 @Singleton
 public class Robot {
-	private Body Body;
+	private Body body;
 	
 	@GET
     @Path("init")
@@ -31,7 +31,7 @@ public class Robot {
         
         System.setOut(ps);
         
-        Body = new Body(EnumWorldAccessMethod.valueOf(accessMethod));
+        body = new Body(EnumWorldAccessMethod.valueOf(accessMethod));
 		
 		System.out.println();
         
@@ -52,7 +52,7 @@ public class Robot {
         System.setOut(ps);
         
         org.omilab.robot.test.Test Test = new org.omilab.robot.test.Test();
-        Test.testBody(Body, system);
+        Test.testBody(body, system);
 		
 		System.out.println();
         
@@ -70,12 +70,12 @@ public class Robot {
     	//spd1,direction1,spd2,...
     	String[] params = s.split(",");
     	
-    	Body.pufferMotorCommand(true);
-    	Body.actMotor((short) 1, EnumMotorDirection.valueOf(params[1]), Short.parseShort(params[0]));
-    	Body.actMotor((short) 2, EnumMotorDirection.valueOf(params[3]), Short.parseShort(params[2]));
-    	Body.actMotor((short) 3, EnumMotorDirection.valueOf(params[5]), Short.parseShort(params[4]));
-    	Body.pufferMotorCommand(false);
-    	Body.actMotor((short) 4, EnumMotorDirection.valueOf(params[7]), Short.parseShort(params[6]));
+    	body.pufferMotorCommand(true);
+    	body.actMotor((short) 1, EnumMotorDirection.valueOf(params[1]), Short.parseShort(params[0]));
+    	body.actMotor((short) 2, EnumMotorDirection.valueOf(params[3]), Short.parseShort(params[2]));
+    	body.actMotor((short) 3, EnumMotorDirection.valueOf(params[5]), Short.parseShort(params[4]));
+    	body.pufferMotorCommand(false);
+    	body.actMotor((short) 4, EnumMotorDirection.valueOf(params[7]), Short.parseShort(params[6]));
     	
     	return "Success";
     }

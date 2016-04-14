@@ -1,18 +1,18 @@
 package org.omilab.robot.mind;
 
 public class AudioModelMind {
-	private String PathToWavFile;
+	private String pathToWavFile;
 	private boolean streaming;
 	
 	public AudioModelMind() {
 		streaming=false;
 	}
 	public void setPathToWavFile(String pathToFile) {
-		PathToWavFile = pathToFile;
+		pathToWavFile = pathToFile;
 	}
 
 	public String getPathToWavFile() {
-		return PathToWavFile;
+		return pathToWavFile;
 	}
 
 	public boolean isStreaming() {

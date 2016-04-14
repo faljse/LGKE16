@@ -3,71 +3,71 @@ import org.omilab.robot.body.Body;
 import org.omilab.robot.interfaces.mindbody.*;
 
 public class Mind implements MindBodyInterface {
-	private ProximityModelMind ProximityModelMind;
-	private MoveModelMind MoveModelMind;
-	private VisionModelMind VisionModelMind;
-	private AudioModelMind AudioModelMind;
-	private ExpressionModelMind ExpressionModelMind;
-	private Body BodyRepresentation;
+	private ProximityModelMind proximityModelMind;
+	private MoveModelMind moveModelMind;
+	private VisionModelMind visionModelMind;
+	private AudioModelMind audioModelMind;
+	private ExpressionModelMind expressionModelMind;
+	private Body bodyRepresentation;
 	
 	public Mind() {
-		ProximityModelMind = new ProximityModelMind();
-		VisionModelMind = new VisionModelMind();
-		MoveModelMind = new MoveModelMind();
-		ExpressionModelMind = new ExpressionModelMind();
+		proximityModelMind = new ProximityModelMind();
+		visionModelMind = new VisionModelMind();
+		moveModelMind = new MoveModelMind();
+		expressionModelMind = new ExpressionModelMind();
 	}
 
 	public void createBodyRepresentation(Body Body) {
-		BodyRepresentation = Body;
+		bodyRepresentation = Body;
 	}
 
 	@Override
 	public void desymbolizeAudioModel() {
-		BodyRepresentation.desymbolizeVisionModel();	
+		bodyRepresentation.desymbolizeVisionModel();
 	}
 
 	@Override
 	public void desymbolizeExpressionModel() {
-		BodyRepresentation.desymbolizeExpressionModel();
+		bodyRepresentation.desymbolizeExpressionModel();
 	}
 	
 	@Override
 	public void desymbolizeMoveModel() {
-		BodyRepresentation.desymbolizeMoveModel();
+		bodyRepresentation.desymbolizeMoveModel();
 	}
 	
 	@Override
 	public void desymbolizeProximityModel() {
-		BodyRepresentation.desymbolizeProximityModel();
+		bodyRepresentation.desymbolizeProximityModel();
 	}
 	
 	@Override
 	public void desymbolizeVisionModel() {
-		BodyRepresentation.desymbolizeVisionModel();
+		bodyRepresentation.desymbolizeVisionModel();
 	}
 
 	public void embody() {
-		BodyRepresentation.setMind(this);
+		bodyRepresentation.setMind(this);
 	}
 
 	public AudioModelMind getAudioModelMind() {
-		return AudioModelMind;
+		return audioModelMind;
 	}
 
 	public ExpressionModelMind getExpressionModelMind() {
-		return ExpressionModelMind;
+		return expressionModelMind;
 	}
 	
 	public MoveModelMind getMoveModelMind() {
-		return MoveModelMind;
+		return moveModelMind;
 	}
 	
 	public ProximityModelMind getProximityModelMind() {
-		return ProximityModelMind;
+		return proximityModelMind;
 	}
 
 	public VisionModelMind getVisionModelMind() {
-		return VisionModelMind;
+		return visionModelMind;
 	}
 	
 	public void startIntelligence() {
@@ -75,25 +75,25 @@ public class Mind implements MindBodyInterface {
 		symbolizeProximityModel();
 		
 		//Express Forward Movement
-		ExpressionModelMind.setDisplay(ExpressionModelMind.DISPLAYFORWARD);
-		ExpressionModelMind.setDisplayColor(ExpressionModelMind.DISPLAYGREEN);
-		ExpressionModelMind.setFlippedDisplay(true);
-		ExpressionModelMind.setSetDisplay(true);
+		expressionModelMind.setDisplay(expressionModelMind.DISPLAYFORWARD);
+		expressionModelMind.setDisplayColor(expressionModelMind.DISPLAYGREEN);
+		expressionModelMind.setFlippedDisplay(true);
+		expressionModelMind.setSetDisplay(true);
 		desymbolizeExpressionModel();
 		
 		//Move Forward
-		MoveModelMind.setDirection(EnumMoveModelDirection.WD4FORWARD);
-		MoveModelMind.setSpeed(255);
+		moveModelMind.setDirection(EnumMoveModelDirection.WD4FORWARD);
+		moveModelMind.setSpeed(255);
 		desymbolizeMoveModel();
 		
 		//Get Sensor Data
-		ProximityModelMind.setActiveRgb(ProximityModelMind.RGBFRONT);
+		proximityModelMind.setActiveRgb(proximityModelMind.RGBFRONT);
 		desymbolizeProximityModel();
 		symbolizeProximityModel();
-		while (ProximityModelMind.hasLeftOuterReflection() && ProximityModelMind.hasLeftInnerReflection() && ProximityModelMind.hasRightOuterReflection() && ProximityModelMind.hasRightInnerReflection()) {
-			if (ProximityModelMind.getRgb()[0] < 5 || ProximityModelMind.getRgb()[1] < 5 || ProximityModelMind.getRgb()[2] < 5) {
+		while (proximityModelMind.hasLeftOuterReflection() && proximityModelMind.hasLeftInnerReflection() && proximityModelMind.hasRightOuterReflection() && proximityModelMind.hasRightInnerReflection()) {
+			if (proximityModelMind.getRgb()[0] < 5 || proximityModelMind.getRgb()[1] < 5 || proximityModelMind.getRgb()[2] < 5) {
 				//Get Vision Data
-				VisionModelMind.setStreaming(false);
+				visionModelMind.setStreaming(false);
 				desymbolizeVisionModel();
 				try {
 					//wait for camera to create a picture
@@ -116,22 +116,22 @@ public class Mind implements MindBodyInterface {
 		}
 		
 		// Stop
-		MoveModelMind.setDirection(EnumMoveModelDirection.WD4STOP);
+		moveModelMind.setDirection(EnumMoveModelDirection.WD4STOP);
 		desymbolizeMoveModel();
 		
 		//Express Stop
-		ExpressionModelMind.setDisplay(ExpressionModelMind.DISPLAYSTOP);
-		ExpressionModelMind.setDisplayColor(ExpressionModelMind.DISPLAYRED);
-		ExpressionModelMind.setSetDisplay(true);
+		expressionModelMind.setDisplay(expressionModelMind.DISPLAYSTOP);
+		expressionModelMind.setDisplayColor(expressionModelMind.DISPLAYRED);
+		expressionModelMind.setSetDisplay(true);
 		desymbolizeExpressionModel();
 	}
 
 	@Override
 	public void symbolizeAudioModel() {
-		BodyRepresentation.symbolizeAudioModel();
-		AudioModelMind.setStreaming(BodyRepresentation.getAudioModelBody().isStreaming());
-		if (!AudioModelMind.isStreaming())
-			AudioModelMind.setPathToWavFile(BodyRepresentation.getAudioModelBody().getPathToWavFile());	
+		bodyRepresentation.symbolizeAudioModel();
+		audioModelMind.setStreaming(bodyRepresentation.getAudioModelBody().isStreaming());
+		if (!audioModelMind.isStreaming())
+			audioModelMind.setPathToWavFile(bodyRepresentation.getAudioModelBody().getPathToWavFile());
 	}
 
 	@Override
@@ -146,34 +146,34 @@ public class Mind implements MindBodyInterface {
 
 	@Override
 	public void symbolizeProximityModel() {
-		BodyRepresentation.symbolizeProximityModel();
+		bodyRepresentation.symbolizeProximityModel();
 		
-		ProximityModelMind.setLeftInnerReflection(BodyRepresentation.getProximityModelBody().hasLeftInnerReflection());
-		ProximityModelMind.setLeftOuterReflection(BodyRepresentation.getProximityModelBody().hasLeftOuterReflection());
-		ProximityModelMind.setRightInnerReflection(BodyRepresentation.getProximityModelBody().hasRightInnerReflection());
-		ProximityModelMind.setRightOuterReflection(BodyRepresentation.getProximityModelBody().hasRightOuterReflection());
+		proximityModelMind.setLeftInnerReflection(bodyRepresentation.getProximityModelBody().hasLeftInnerReflection());
+		proximityModelMind.setLeftOuterReflection(bodyRepresentation.getProximityModelBody().hasLeftOuterReflection());
+		proximityModelMind.setRightInnerReflection(bodyRepresentation.getProximityModelBody().hasRightInnerReflection());
+		proximityModelMind.setRightOuterReflection(bodyRepresentation.getProximityModelBody().hasRightOuterReflection());
 		
-		ProximityModelMind.setLeftInnerReflectionValue(BodyRepresentation.getProximityModelBody().getLeftInnerReflectionValue());
-		ProximityModelMind.setLeftOuterReflectionValue(BodyRepresentation.getProximityModelBody().getLeftOuterReflectionValue());
-		ProximityModelMind.setRightInnerReflectionValue(BodyRepresentation.getProximityModelBody().getRightInnerReflectionValue());
-		ProximityModelMind.setRightOuterReflectionValue(BodyRepresentation.getProximityModelBody().getRightOuterReflectionValue());
+		proximityModelMind.setLeftInnerReflectionValue(bodyRepresentation.getProximityModelBody().getLeftInnerReflectionValue());
+		proximityModelMind.setLeftOuterReflectionValue(bodyRepresentation.getProximityModelBody().getLeftOuterReflectionValue());
+		proximityModelMind.setRightInnerReflectionValue(bodyRepresentation.getProximityModelBody().getRightInnerReflectionValue());
+		proximityModelMind.setRightOuterReflectionValue(bodyRepresentation.getProximityModelBody().getRightOuterReflectionValue());
 		
-		short[] s = BodyRepresentation.getProximityModelBody().getRgb();
-		ProximityModelMind.setRgb(s[0], s[1], s[2], s[3], s[4], s[5]);
+		short[] s = bodyRepresentation.getProximityModelBody().getRgb();
+		proximityModelMind.setRgb(s[0], s[1], s[2], s[3], s[4], s[5]);
 		
-		s = BodyRepresentation.getProximityModelBody().getRotGyrAcc();
-		ProximityModelMind.setRotGyrAcc(s[0]/1000, s[1]/1000, s[2]/1000, s[3]/1000, s[4]/1000, s[5]/1000, s[6]/1000, s[7]/1000);
+		s = bodyRepresentation.getProximityModelBody().getRotGyrAcc();
+		proximityModelMind.setRotGyrAcc(s[0]/1000, s[1]/1000, s[2]/1000, s[3]/1000, s[4]/1000, s[5]/1000, s[6]/1000, s[7]/1000);
 		
-		ProximityModelMind.setHeading(BodyRepresentation.getProximityModelBody().getHeadingMin(), BodyRepresentation.getProximityModelBody().getHeadingSec());
-		ProximityModelMind.setDistance(BodyRepresentation.getProximityModelBody().getDistance());
+		proximityModelMind.setHeading(bodyRepresentation.getProximityModelBody().getHeadingMin(), bodyRepresentation.getProximityModelBody().getHeadingSec());
+		proximityModelMind.setDistance(bodyRepresentation.getProximityModelBody().getDistance());
 	}
 
 	@Override
 	public void symbolizeVisionModel() {
-		BodyRepresentation.symbolizeVisionModel();
-		VisionModelMind.setStreaming(BodyRepresentation.getVisionModelBody().isStreaming());
-		if (!VisionModelMind.isStreaming())
-			VisionModelMind.setPathToJpgFile(BodyRepresentation.getVisionModelBody().getPathToJpgFile());	
+		bodyRepresentation.symbolizeVisionModel();
+		visionModelMind.setStreaming(bodyRepresentation.getVisionModelBody().isStreaming());
+		if (!visionModelMind.isStreaming())
+			visionModelMind.setPathToJpgFile(bodyRepresentation.getVisionModelBody().getPathToJpgFile());
 	}
 	
 }

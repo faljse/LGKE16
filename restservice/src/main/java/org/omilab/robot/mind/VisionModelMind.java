@@ -1,18 +1,18 @@
 package org.omilab.robot.mind;
 
 public class VisionModelMind {
-	private String PathToJpgFile;
+	private String pathToJpgFile;
 	private boolean streaming;
 	
 	public VisionModelMind() {
 		streaming=false;
 	}
 	public void setPathToJpgFile(String pathToFile) {
-		PathToJpgFile = pathToFile;
+		pathToJpgFile = pathToFile;
 	}
 
 	public String getPathToJpgFile() {
-		return PathToJpgFile;
+		return pathToJpgFile;
 	}
 
 	public boolean isStreaming() {
