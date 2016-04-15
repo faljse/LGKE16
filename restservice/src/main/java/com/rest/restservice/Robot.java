@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import org.omilab.robot.body.Body;
 import org.omilab.robot.interfaces.bodyworld.EnumMotorDirection;
 import org.omilab.robot.interfaces.bodyworld.EnumWorldAccessMethod;
+import org.omilab.robot.test.Test;
 
 @Path("/robot")
 @Singleton
@@ -51,9 +52,9 @@ public class Robot {
         
         System.setOut(ps);
         
-        org.omilab.robot.test.Test Test = new org.omilab.robot.test.Test();
+        Test test = new Test();
         try {
-            Test.testBody(body, system);
+            test.testBody(body, system);
         }   catch (IOException e){
             e.printStackTrace();
         }
