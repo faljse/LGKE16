@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 public class SocketClient {
     private static final Logger log = Logger.getLogger(SocketClient.class.getName());
 
-    public String host = "";
-    public int port = 1025;
+    private String host = "";
+    private int port = 1025;
 
     static void copy(InputStream in, OutputStream out) throws IOException {
         byte[] buf = new byte[1024];
@@ -87,7 +87,6 @@ public class SocketClient {
                 while (i < countOutputBytes)
                     i += soc.getInputStream().read(ret, i, countOutputBytes - i);
             }
-
         }
         finally {
             try {
@@ -95,8 +94,6 @@ public class SocketClient {
             } catch (IOException e) {
             }
         }
-
-
 
         return ret;
     }
