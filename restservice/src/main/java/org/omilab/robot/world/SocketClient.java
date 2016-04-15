@@ -22,7 +22,7 @@ public class SocketClient {
         }
     }
 
-    private short[] socketCommunicationShorts(byte command, short[] inputs, int countOutputShorts) {
+    private short[] socketCommunicationShorts(byte command, short[] inputs, int countOutputShorts) throws IOException {
         short[] ret = new short[countOutputShorts];
         ByteBuffer bb = null;
         byte[] b = null;
@@ -49,7 +49,7 @@ public class SocketClient {
         return ret;
     }
 
-    private short[] socketCommunicationBytesinputShortsoutput(byte command, byte[] inputs, int countOutputShorts) {
+    private short[] socketCommunicationBytesinputShortsoutput(byte command, byte[] inputs, int countOutputShorts) throws IOException {
         short[] ret = new short[countOutputShorts];
         ByteBuffer bb = null;
 
@@ -62,7 +62,7 @@ public class SocketClient {
         return ret;
     }
 
-    private byte[] socketCommunicationBytes(byte command, byte[] inputs, int countOutputBytes) {
+    private byte[] socketCommunicationBytes(byte command, byte[] inputs, int countOutputBytes) throws IOException {
         Socket soc = null;
         byte[] ret = new byte[countOutputBytes];
 
@@ -88,15 +88,15 @@ public class SocketClient {
                     i += soc.getInputStream().read(ret, i, countOutputBytes - i);
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        finally {
+            try {
+                soc.close();
+            } catch (IOException e) {
+            }
         }
 
-        try {
-            soc.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
 
         return ret;
     }
@@ -218,84 +218,84 @@ public class SocketClient {
         return b;
     }
 
-    public void connect() {
+    public void connect() throws IOException {
         if (socketCommunicationBytes((byte) 'c', null, 1)[0] != 0)
-            System.out.println("Connection Successful!");
+            log.info("Connection Successful!");
         else
-            System.out.println("Error in connect command, check server status!");
+            log.severe("Error in connect command, check server status!");
     }
 
-    public void disableAudioStream(String address) {
+    public void disableAudioStream(String address) throws IOException {
         if (socketCommunicationBytes((byte) 'a', addressToBytes(address), 1)[0] == 0)
-            System.out.println("Error in disableAudioStream command, check server status!");
+            log.severe("Error in disableAudioStream command, check server status!");
     }
 
-    public void disableVideoStream(String address) {
+    public void disableVideoStream(String address) throws IOException {
         if (socketCommunicationBytes((byte) 'v', addressToBytes(address), 1)[0] == 0)
-            System.out.println("Error in disableVideoStream command, check server status!");
+            log.severe("Error in disableVideoStream command, check server status!");
     }
 
-    public void drive(short spd1, short spd2, short spd3, short spd4, short dir1, short dir2, short dir3, short dir4) {
+    public void drive(short spd1, short spd2, short spd3, short spd4, short dir1, short dir2, short dir3, short dir4) throws IOException {
         if (socketCommunicationBytes((byte) 'D', new byte[]{(byte) spd1, (byte) spd2, (byte) spd3, (byte) spd4, (byte) dir1, (byte) dir2, (byte) dir3, (byte) dir4}, 1)[0] == 0)
-            System.out.println("Error in drive command, check server status!");
+            log.severe("Error in drive command, check server status!");
     }
 
-    public void enableAudioStream(String address) {
+    public void enableAudioStream(String address) throws IOException {
         if (socketCommunicationBytes((byte) 'A', addressToBytes(address), 1)[0] == 0)
-            System.out.println("Error in enableAudioStream command, check server status!");
+            log.severe("Error in enableAudioStream command, check server status!");
     }
 
-    public void enableVideoStream(String address) {
+    public void enableVideoStream(String address) throws IOException {
         if (socketCommunicationBytes((byte) 'V', addressToBytes(address), 1)[0] == 0)
-            System.out.println("Error in enableStream command, check server status!");
+            log.severe("Error in enableStream command, check server status!");
     }
 
-    public short[] getADCAllChannelValues(char ADCIndentifier) {
+    public short[] getADCAllChannelValues(char ADCIndentifier) throws IOException {
         return socketCommunicationShorts((byte) ADCIndentifier, null, 4);
     }
 
-    public short getADCsingleChannelValue(char ADCIndentifier, short number) {
+    public short getADCsingleChannelValue(char ADCIndentifier, short number) throws IOException {
         return socketCommunicationBytesinputShortsoutput((byte) ADCIndentifier, new byte[]{(byte) number}, 1)[0];
     }
 
-    public short getDistance() {
+    public short getDistance() throws IOException {
         return socketCommunicationShorts((byte) 'T', null, 1)[0];
     }
 
-    public short[] getColorSensorValues() {
+    public short[] getColorSensorValues() throws IOException {
         return socketCommunicationShorts((byte) 'R', null, 6);
     }
 
-    public short[] getHeading() {
+    public short[] getHeading() throws IOException {
         return socketCommunicationShorts((byte) 'H', null, 2);
     }
 
-    public short[] getRotationGyroAccelerometer() {
+    public short[] getRotationGyroAccelerometer() throws IOException {
         return socketCommunicationShorts((byte) 'G', null, 8);
     }
 
-    public void initiate() {
+    public void initiate() throws IOException {
         if (socketCommunicationBytes((byte) 'i', new byte[]{(byte) 0, (byte) 0}, 1)[0] != 0)
-            System.out.println("Socket Server Initialization Successful!");
+            log.info("Socket Server Initialization Successful!");
         else
-            System.out.println("Error in initiate command, check server status!");
+            log.severe("Error in initiate command, check server status!");
     }
 
-    public void muxI2C(short number) {
+    public void muxI2C(short number) throws IOException {
         if (socketCommunicationBytes((byte) 'X', new byte[]{(byte) number}, 1)[0] == 0)
-            System.out.println("Error in muxI2C command, check server status!");
+            log.severe("Error in muxI2C command, check server status!");
     }
 
-    public void quit() {
+    public void quit() throws IOException {
         if (socketCommunicationBytes((byte) 'q', null, 1)[0] != 0)
-            System.out.println("Server Shutdown!");
+            log.info("Server Shutdown!");
         else
-            System.out.println("Error in initiate command, check server status!");
+            log.severe("Error in initiate command, check server status!");
     }
 
-    public void playWav() {
+    public void playWav() throws IOException {
         if (socketCommunicationBytes((byte) 'P', null, 1)[0] == 0)
-            System.out.println("Error in playWav command, check server status!");
+            log.severe("Error in playWav command, check server status!");
     }
 
     /**
@@ -325,17 +325,17 @@ public class SocketClient {
         receiveFile(imagePath, (byte) 'A', 5);
     }
 
-    public void recordCameraJPG() {
+    public void recordCameraJPG() throws IOException {
         if (socketCommunicationBytes((byte) 'I', null, 1)[0] == 0)
-            System.out.println("Error in recordCameraJPG command, check server status!");
+            log.severe("Error in recordCameraJPG command, check server status!");
     }
 
-    public void recordMicWAV(short durationSeconds) {
+    public void recordMicWAV(short durationSeconds) throws IOException {
         if (socketCommunicationBytes((byte) 'S', new byte[]{(byte) durationSeconds, (byte) (durationSeconds >> 8)}, 1)[0] == 0)
-            System.out.println("Error in recordMicWAV command, check server status!");
+            log.severe("Error in recordMicWAV command, check server status!");
     }
 
-    public void setLCDDisplay(String text, short[] color) {
+    public void setLCDDisplay(String text, short[] color) throws IOException {
         byte[] inputs = new byte[3 + 32];
 
         inputs[0] = (byte) color[0];
@@ -351,10 +351,10 @@ public class SocketClient {
                 inputs[3 + i] = 0x00;
 
         if (socketCommunicationBytes((byte) 'W', inputs, 1)[0] == 0)
-            System.out.println("Error in setLCDDisplay command, check server status!");
+            log.severe("Error in setLCDDisplay command, check server status!");
     }
 
-    public void setRGBMatrix(short[][] matrix) {
+    public void setRGBMatrix(short[][] matrix) throws IOException {
         byte[] inputs = new byte[8 * 8];
 
         for (int i = 0; i < 8; i++)
@@ -363,35 +363,35 @@ public class SocketClient {
             }
 
         if (socketCommunicationBytes((byte) 'M', inputs, 1)[0] == 0)
-            System.out.println("Error in setRGBMatrix command, check server status!");
+            log.severe("Error in setRGBMatrix command, check server status!");
     }
 
-    public void servo(short channel, short value) {
+    public void servo(short channel, short value) throws IOException {
         if (socketCommunicationBytes((byte) 'E', new byte[]{(byte) channel, (byte) value, (byte) (value >> 8)}, 1)[0] == 0)
-            System.out.println("Error in servo command, check server status!");
+            log.severe("Error in servo command, check server status!");
     }
 
-    public void laser(boolean on) {
+    public void laser(boolean on) throws IOException {
         if (socketCommunicationBytes((byte) 'L', new byte[]{(byte) (on ? 1 : 0)}, 1)[0] == 0)
-            System.out.println("Error in laser command, check server status!");
+            log.severe("Error in laser command, check server status!");
     }
 
-    public boolean digitalNoise() {
+    public boolean digitalNoise() throws IOException {
         if (socketCommunicationBytes((byte) 'N', null, 1)[0] != 0)
             return true;
         return false;
     }
 
-    public short analogNoise() {
+    public short analogNoise() throws IOException {
         return socketCommunicationBytesinputShortsoutput((byte) '8', new byte[]{(byte) 0}, 1)[0];
     }
 
-    public void buzz(short hz) {
+    public void buzz(short hz) throws IOException {
         if (socketCommunicationBytes((byte) 'B', new byte[]{(byte) hz, (byte) (hz >> 8)}, 1)[0] == 0)
-            System.out.println("Error in buzz command, check server status!");
+            log.severe("Error in buzz command, check server status!");
     }
 
-    public short temp() {
+    public short temp() throws IOException {
         return socketCommunicationShorts((byte) 'C', null, 1)[0];
     }
 }

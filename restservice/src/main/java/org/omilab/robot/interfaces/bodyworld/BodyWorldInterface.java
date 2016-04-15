@@ -15,7 +15,7 @@ public interface BodyWorldInterface {
 	 * @param seconds
 	 *            Recording time in milliseconds
 	 */
-	void actAudioCaptureMic(short seconds);
+	void actAudioCaptureMic(short seconds) throws IOException;
 
 	/**
 	 * Turns audio streaming on or off
@@ -23,7 +23,7 @@ public interface BodyWorldInterface {
 	 * @param on
 	 * @param address ip:port to broadcast to
 	 */
-	void actAudioStreamMic(boolean on, String address);
+	void actAudioStreamMic(boolean on, String address) throws IOException;
 
 	/**
 	 * MUX the color sensors
@@ -31,7 +31,7 @@ public interface BodyWorldInterface {
 	 * @param number
 	 *            Sensor to be activated
 	 */
-	void actColorSensors(short number);
+	void actColorSensors(short number) throws IOException;
 
 	/**
 	 * Displays an image on the 8x8 bicolor LED matrix
@@ -39,7 +39,7 @@ public interface BodyWorldInterface {
 	 * @param matrix
 	 *            8x8 x (0 - 3, 0 := Off, 1 := Green, 2 := Red, 3 :=Yellow)
 	 */
-	void actDisplay(short[][] matrix);
+	void actDisplay(short[][] matrix) throws IOException;
 
 	/**
 	 * Sends distance measurement pings for one measurement
@@ -51,7 +51,7 @@ public interface BodyWorldInterface {
 	 * 
 	 * @param on 
 	 */
-	void actLaser(boolean on);
+	void actLaser(boolean on) throws IOException;
 
 	/**
 	 * Writes text to the LCD Display
@@ -61,7 +61,7 @@ public interface BodyWorldInterface {
 	 * @param color
 	 *            RGB 3 x (0 or 1)
 	 */
-	void actLCD(String text, short[] color);
+	void actLCD(String text, short[] color) throws IOException;
 
 	/**
 	 * Controls the DC/Stepper Motors
@@ -74,7 +74,7 @@ public interface BodyWorldInterface {
 	 * @param speed
 	 *            (0-255)
 	 */
-	void actMotor(short number, EnumMotorDirection Direction, short speed);
+	void actMotor(short number, EnumMotorDirection Direction, short speed) throws IOException;
 
 	/**
 	 * Activates or deactivates the buzz sensor
@@ -82,12 +82,12 @@ public interface BodyWorldInterface {
 	 * @param herz
 	 *            Herz
 	 */
-	void actNoise(short herz);
+	void actNoise(short herz) throws IOException;
 
 	/**
 	 * Plays a WAV file
 	 */
-	void actPlaySound();
+	void actPlaySound() throws IOException;
 
 	/**
 	 * Transfers a WAV file and plays it
@@ -102,12 +102,12 @@ public interface BodyWorldInterface {
 	 * @param ServoAngle
 	 *            Rotation of Servo in pulse duration
 	 */
-	void actServo(short channel, EnumServoAngle ServoAngle);
+	void actServo(short channel, EnumServoAngle ServoAngle) throws IOException;
 
 	/**
 	 * Takes a picture with the raspberry pi camera
 	 */
-	void actVisionCaptureCamera();
+	void actVisionCaptureCamera() throws IOException;
 
 	/**
 	 * Turns video streaming on or off
@@ -115,13 +115,13 @@ public interface BodyWorldInterface {
 	 * @param on
 	 * @param address ip:port to broadcast to
 	 */
-	void actVisionStreamCamera(boolean on, String address);
+	void actVisionStreamCamera(boolean on, String address) throws IOException;
 	
 	/**
 	 * Disables the robot by turning off the socket server
 	 * 
 	 */
-	void death();
+	void death() throws IOException;
 
 	/**
 	 * Senses 4 line/reflection sensors

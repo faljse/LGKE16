@@ -4,11 +4,11 @@ import java.io.IOException;
 
 public interface MindBodyInterface {
 	//desymbolize logic is in body - should be done somewhere else, e.g. in the interface class which would need its own data classes
-	void desymbolizeExpressionModel();
-	void desymbolizeMoveModel();
-	void desymbolizeProximityModel();
-	void desymbolizeAudioModel();
-	void desymbolizeVisionModel(); 
+	void desymbolizeExpressionModel() throws IOException;
+	void desymbolizeMoveModel() throws IOException;
+	void desymbolizeProximityModel() throws IOException;
+	void desymbolizeAudioModel() throws IOException;
+	void desymbolizeVisionModel() throws IOException;
 	
 	//symbolize logic is in mind - should be done somewhere else, e.g. in the interface class which would need its own data classes
 	void symbolizeExpressionModel() throws IOException;

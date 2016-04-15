@@ -24,27 +24,27 @@ public class Mind implements MindBodyInterface {
 	}
 
 	@Override
-	public void desymbolizeAudioModel() {
+	public void desymbolizeAudioModel() throws IOException {
 		bodyRepresentation.desymbolizeVisionModel();
 	}
 
 	@Override
-	public void desymbolizeExpressionModel() {
+	public void desymbolizeExpressionModel() throws IOException {
 		bodyRepresentation.desymbolizeExpressionModel();
 	}
 	
 	@Override
-	public void desymbolizeMoveModel() {
+	public void desymbolizeMoveModel() throws IOException {
 		bodyRepresentation.desymbolizeMoveModel();
 	}
 	
 	@Override
-	public void desymbolizeProximityModel() {
+	public void desymbolizeProximityModel() throws IOException {
 		bodyRepresentation.desymbolizeProximityModel();
 	}
 	
 	@Override
-	public void desymbolizeVisionModel() {
+	public void desymbolizeVisionModel() throws IOException {
 		bodyRepresentation.desymbolizeVisionModel();
 	}
 

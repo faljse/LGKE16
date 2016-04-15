@@ -6,7 +6,7 @@ import org.omilab.robot.interfaces.bodyworld.EnumServoAngle;
 import java.io.IOException;
 
 public class Test {
-    public void testBody(Body body, String system) {
+    public void testBody(Body body, String system) throws IOException {
         if (body == null) {
             System.out.println("System not initiated");
             return;

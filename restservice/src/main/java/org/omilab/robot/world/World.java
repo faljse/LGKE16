@@ -32,7 +32,7 @@ public class World implements BodyWorldInterface {
 	}
 	
 	@Override
-	public void actAudioCaptureMic(short seconds) {
+	public void actAudioCaptureMic(short seconds) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.recordMicWAV(seconds);
@@ -41,12 +41,11 @@ public class World implements BodyWorldInterface {
 		case TESTDATA:
 			log.info("> Create wav file on server!");
 			break;
-			
 		}
 	}
 
 	@Override
-	public void actAudioStreamMic(boolean on, String address) {
+	public void actAudioStreamMic(boolean on, String address) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			if (on == true)
@@ -65,7 +64,7 @@ public class World implements BodyWorldInterface {
 		}
 	}
 
-	public void actColorSensors(short number) {
+	public void actColorSensors(short number) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			if (number == 0)
@@ -84,7 +83,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public void actDisplay(short[][] matrix) {
+	public void actDisplay(short[][] matrix) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.setRGBMatrix(matrix);
@@ -113,14 +112,13 @@ public class World implements BodyWorldInterface {
 			break;
 		
 		case TESTDATA:
-		log.info("> Starting distance measurement on the server!");
+			log.info("> Starting distance measurement on the server!");
 			break;
-			
 		}
 	}
 	
 	@Override
-	public void actLCD(String text, short[] color) {
+	public void actLCD(String text, short[] color) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.setLCDDisplay(text, color);
@@ -129,12 +127,11 @@ public class World implements BodyWorldInterface {
 		case TESTDATA:
 			log.info("> Set the LCD on the server to '" + text + "'!");
 			break;
-			
 		}
 	}
 
 	@Override
-	public void actMotor(short number, EnumMotorDirection Direction, short speed) {
+	public void actMotor(short number, EnumMotorDirection Direction, short speed) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			if (pufferMotorCommand) {
@@ -155,7 +152,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public void actNoise(short hz) {
+	public void actNoise(short hz) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.buzz(hz);
@@ -164,12 +161,11 @@ public class World implements BodyWorldInterface {
 		case TESTDATA:
 			log.info("> Buzz on Server with Freq "+Integer.toString(hz)+"!");
 			break;
-			
 		}
 	}
 
 	@Override
-	public void actVisionCaptureCamera() {
+	public void actVisionCaptureCamera() throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.recordCameraJPG();
@@ -183,7 +179,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public void actVisionStreamCamera(boolean on, String address) {
+	public void actVisionStreamCamera(boolean on, String address) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			if (on == true)
@@ -439,7 +435,7 @@ public class World implements BodyWorldInterface {
 		return sb.toString();
 	}
 
-	public void setAccessmethod(EnumWorldAccessMethod AccessMethod) {
+	public void setAccessmethod(EnumWorldAccessMethod AccessMethod) throws IOException {
 		this.accessmethod = AccessMethod;
 		log.info("Access Method is: \"" + this.accessmethod.toString()+"\"");
 		motorparam = new int[][] {{0,0}, {0,0}, {0,0}, {0,0}};
@@ -472,7 +468,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public void actServo(short channel, EnumServoAngle ServoAngle) {
+	public void actServo(short channel, EnumServoAngle ServoAngle) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.servo(channel, (short) ServoAngle.getValue());
@@ -485,7 +481,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public void actPlaySound() {
+	public void actPlaySound() throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.playWav();
@@ -513,7 +509,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public void actLaser(boolean on) {
+	public void actLaser(boolean on) throws IOException {
 		switch(accessmethod) {
 		case SOCKET:
 			robot.laser(on);
@@ -546,7 +542,7 @@ public class World implements BodyWorldInterface {
 	}
 
 	@Override
-	public void death() {
+	public void death() throws IOException {
 		switch(accessmethod) {
 			case SOCKET:
 				robot.quit();

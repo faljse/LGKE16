@@ -28,7 +28,7 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
         world = new World();
     }
 
-    public Body(EnumWorldAccessMethod WorldAccessMethod) {
+    public Body(EnumWorldAccessMethod WorldAccessMethod) throws IOException {
         this();
         world.setAccessmethod(WorldAccessMethod);
     }
@@ -38,22 +38,22 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     //
 
     @Override
-    public void actAudioCaptureMic(short seconds) {
+    public void actAudioCaptureMic(short seconds) throws IOException {
         world.actAudioCaptureMic(seconds);
     }
 
     @Override
-    public void actAudioStreamMic(boolean on, String address) {
+    public void actAudioStreamMic(boolean on, String address) throws IOException {
         world.actAudioStreamMic(on, address);
     }
 
     @Override
-    public void actColorSensors(short number) {
+    public void actColorSensors(short number) throws IOException {
         world.actColorSensors(number);
     }
 
     @Override
-    public void actDisplay(short[][] s) {
+    public void actDisplay(short[][] s) throws IOException {
         world.actDisplay(s);
     }
 
@@ -63,27 +63,27 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void actLaser(boolean on) {
+    public void actLaser(boolean on) throws IOException {
         world.actLaser(on);
     }
 
     @Override
-    public void actLCD(String text, short[] color) {
+    public void actLCD(String text, short[] color) throws IOException {
         world.actLCD(text, color);
     }
 
     @Override
-    public void actMotor(short number, EnumMotorDirection Direction, short speed) {
+    public void actMotor(short number, EnumMotorDirection Direction, short speed) throws IOException {
         world.actMotor(number, Direction, speed);
     }
 
     @Override
-    public void actNoise(short hz) {
+    public void actNoise(short hz) throws IOException {
         world.actNoise(hz);
     }
 
     @Override
-    public void actPlaySound() {
+    public void actPlaySound() throws IOException {
         world.actPlaySound();
     }
 
@@ -92,17 +92,17 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void actServo(short channel, EnumServoAngle ServoAngle) {
+    public void actServo(short channel, EnumServoAngle ServoAngle) throws IOException {
         world.actServo(channel, ServoAngle);
     }
 
     @Override
-    public void actVisionCaptureCamera() {
+    public void actVisionCaptureCamera() throws IOException {
         world.actVisionCaptureCamera();
     }
 
     @Override
-    public void actVisionStreamCamera(boolean streaming, String address) {
+    public void actVisionStreamCamera(boolean streaming, String address) throws IOException {
         world.actVisionStreamCamera(streaming, address);
     }
 
@@ -190,7 +190,7 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void desymbolizeAudioModel() {
+    public void desymbolizeAudioModel() throws IOException {
         if (!mindBackdoorAccess.getAudioModelMind().isStreaming()) {
             if (audioModelBody.isStreaming()) {
                 actAudioStreamMic(false, "");
@@ -204,7 +204,7 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void desymbolizeExpressionModel() {
+    public void desymbolizeExpressionModel() throws IOException {
         if (mindBackdoorAccess.getExpressionModelMind().isSetDisplay()) {
             short[][] s = mindBackdoorAccess.getExpressionModelMind().getDisplay();
             short[][] sFlipped = new short[8][8];
@@ -236,7 +236,7 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void desymbolizeMoveModel() {
+    public void desymbolizeMoveModel() throws IOException {
         short speed = (short) mindBackdoorAccess.getMoveModelMind().getSpeed();
         switch (mindBackdoorAccess.getMoveModelMind().getDirection()) {
             case WD4FORWARD:
@@ -553,7 +553,7 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void desymbolizeProximityModel() {
+    public void desymbolizeProximityModel() throws IOException {
         proximityModelBody.setActiveRgb(mindBackdoorAccess.getProximityModelMind().getActiveRgb());
         if (proximityModelBody.getActiveRgb() == 1)
             actColorSensors((short) 7);
@@ -568,7 +568,7 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void desymbolizeVisionModel() {
+    public void desymbolizeVisionModel() throws IOException {
         if (!mindBackdoorAccess.getVisionModelMind().isStreaming()) {
             if (visionModelBody.isStreaming()) {
                 actVisionStreamCamera(false, "");
@@ -642,7 +642,7 @@ public class Body implements BodyWorldInterface, MindBodyInterface {
     }
 
     @Override
-    public void death() {
+    public void death() throws IOException {
         world.death();
     }
 
